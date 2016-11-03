@@ -1,5 +1,7 @@
 class GeocodeController < ApplicationController
   def search
-    render json: {message: "ERROR"}.to_json, status: :not_found
+    s = params[:query]
+    headers, body, status = Geocoder.search(s)
+    render json: body.to_json, status: status
   end
 end

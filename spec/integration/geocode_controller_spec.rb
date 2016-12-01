@@ -5,14 +5,16 @@ test_data = {
   qct_request: '8 Market Place Baltimore MD 21202',
   brac_request: 'forrestal dr, ceiba',
   navajo_request: 'navajo',
-  indian_lands_request: '2424 S. Country Club Road, El Reno, OK 73036'
+  indian_lands_request: '2424 S. Country Club Road, El Reno, OK 73036',
+  county_request: 'calle barceló, jayuya,  PR'
 }
 test_results = {
   empty_request: '',
   qct_request: '8 Market Pl, Baltimore, MD 21202, USA',
   brac_request: 'Forrestal Dr, Ceiba, 00735, Puerto Rico',
   navajo_request: 'Navajo, NM 87328, USA',
-  indian_lands_request: '2424 S Country Club Rd, El Reno, OK 73036, USA'
+  indian_lands_request: '2424 S Country Club Rd, El Reno, OK 73036, USA',
+  county_request: 'Calle Romero Barceló, Jayuya, 00664, Puerto Rico'
 }
 
 RSpec.describe GeocodeController, type: :request do
@@ -117,6 +119,28 @@ RSpec.describe GeocodeController, type: :request do
       it 'should have one indian lands designation' do
         body = JSON.parse response.body
         expect(body['hubzone'][0]['hz_type']).to eql('indian_lands')
+      end
+    end
+
+    context 'given a search for a location in qualified county' do
+      before do
+        get search_url, params: {q: test_data[:county_request]},
+                        headers: {'Content-Type' => 'application/json'}
+      end
+      it 'should succeed' do
+        expect(response).to have_http_status(:ok)
+      end
+      it 'should contain the correct formatted address' do
+        body = JSON.parse response.body
+        expect(body['formatted_address']).to eql(test_results[:county_request])
+      end
+      it 'should have one designation' do
+        body = JSON.parse response.body
+        expect(body['hubzone'].size).to eql(1)
+      end
+      it 'should have one county designation' do
+        body = JSON.parse response.body
+        expect(body['hubzone'][0]['hz_type']).to eql('qnmc')
       end
     end
   end

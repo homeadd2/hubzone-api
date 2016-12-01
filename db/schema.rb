@@ -14,9 +14,27 @@ ActiveRecord::Schema.define(version: 20161115191042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
   enable_extension "hstore"
   enable_extension "uuid-ossp"
-  enable_extension "postgis"
+
+# Could not dump table "hz_current" because of following StandardError
+#   Unknown type 'geometry(MultiPolygon,4326)' for column 'geom'
+
+# Could not dump table "hz_current_lowerres" because of following StandardError
+#   Unknown type 'geometry(MultiPolygon,4326)' for column 'geom'
+
+# Could not dump table "hz_current_lowestres" because of following StandardError
+#   Unknown type 'geometry(MultiPolygon,4326)' for column 'geom'
+
+# Could not dump table "hz_current_lowres" because of following StandardError
+#   Unknown type 'geometry(MultiPolygon,4326)' for column 'geom'
+
+# Could not dump table "qct_highres_union" because of following StandardError
+#   Unknown type 'geometry(MultiPolygon,4326)' for column 'geom'
+
+# Could not dump table "qct_lowestres_union" because of following StandardError
+#   Unknown type 'geometry(MultiPolygon,4326)' for column 'geom'
 
   create_table "spatial_ref_sys", primary_key: "srid", id: :integer, force: :cascade do |t|
     t.string  "auth_name", limit: 256

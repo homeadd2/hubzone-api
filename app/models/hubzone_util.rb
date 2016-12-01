@@ -32,7 +32,7 @@ class HubzoneUtil
 
     def append_assertions(results)
       results[:hubzone] = []
-      %w(qct brac indian_lands).each do |hz_type|
+      %w(qct brac indian_lands qnmc).each do |hz_type|
         results[:hubzone] += assertion results['geometry']['location'], hz_type
       end
     end
